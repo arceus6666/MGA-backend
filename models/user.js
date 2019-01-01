@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-//const bcrypt = require('bcrypt-nodejs')
-//const crypto = require('crypto')
+// const bcrypt = require('bcrypt-nodejs')
+// const crypto = require('crypto')
 
 var userSchema = new Schema({
   username: {
@@ -11,8 +11,7 @@ var userSchema = new Schema({
   },
   fullName: {
     firstName: String,
-    lastName: String,
-    required: true
+    lastName: String
   },
   email: {
     type: String,
@@ -60,6 +59,6 @@ userSchema.pre('save', (next) => {
 })
 */
 
-var User = mongoose.model("User", userSchema)
+var User = mongoose.model('User', userSchema)
 
 module.exports = User

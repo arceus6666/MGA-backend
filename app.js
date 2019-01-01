@@ -9,7 +9,7 @@ const comentApi = require('./routes/coment')
 const app = express()
 
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors())
 app.use('/users', userApi)
 app.use('/games', gameApi)
