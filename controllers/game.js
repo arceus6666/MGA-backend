@@ -34,7 +34,6 @@ const getById = (req, res) => {
 }
 
 const getByName = (req, res) => {
-  console.log(req.query.param)
   Game.findOne({ name: req.query.param }, (err, game) => {
     if (err) return res.status(500).send({ msg: err, ok: false })
     if (!game) return res.status(500).send({ msg: 'Game not found', ok: false })
@@ -57,7 +56,6 @@ const updateRating = (req, res) => {
 
 const getAll = (req, res) => {
   Game.find({}, (err, games) => {
-    console.log(games)
     if (err) {
       res.status(500).send({ msg: err, ok: false })
     } else {

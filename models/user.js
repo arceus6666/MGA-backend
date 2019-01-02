@@ -9,9 +9,14 @@ var userSchema = new Schema({
     unique: true,
     required: true
   },
-  fullName: {
-    firstName: String,
-    lastName: String
+  fullname: {
+    firstname: String,
+    lastname: String
+  },
+  profilePic: {
+    type: String,
+    default: 'profile.png',
+    required: true
   },
   email: {
     type: String,
@@ -24,18 +29,11 @@ var userSchema = new Schema({
   },
   favorites: {
     genres: [String],
-    platforms: [String],
-    companies: [String],
     games: [String]
   },
   signupDate: {
     type: Date,
     default: Date.now(),
-    required: true
-  },
-  role: {
-    type: String,
-    default: false,
     required: true
   },
   lastLogin: {

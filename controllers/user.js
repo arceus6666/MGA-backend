@@ -1,18 +1,15 @@
 const User = require('../models/user')
 
-function signUp(req, res) {
+const signUp = (req, res) => {
   const user = new User({
     username: req.body.username,
-    fullName: req.body.fullName,
+    fullname: req.body.fullname,
     email: req.body.email,
     password: req.body.password,
     favorites: {
       genres: [],
-      platforms: [],
-      companies: [],
       games: []
-    },
-    role: req.body.role
+    }
   })
 
   if (req.body.favorites) {
@@ -20,20 +17,22 @@ function signUp(req, res) {
   }
 
   user.save().then((us) => {
-    res.send(us)
+    res.statsu(200).send({ msg: us, ok: true })
   }, (err) => {
-    res.send(err)
+    res.status(500).send({ msg: err, ok: false })
   })
 }
 
-function login(req, res) {
-  User.findOne({ username: req.query.username }, (err, user) => {
+const login = (req, res) => {
+  if (!req.query.param) return res.status(500).send({ msg: 'Error', ok: false })
+  let param = req.query.param.split('-')
+  User.findOne({ username: param[0] }, (err, user) => {
     if (err) return res.status(500).send({ msg: err, ok: false })
     if (!user) return res.status(500).send({ msg: 'Usuario no encontrado', ok: false })
-    if (user.password === req.query.password) {
+    if (user.password === param[1]) {
       user.lastLogin = Date.now()
       user.save().then((userInfo) => {
-        res.status(200).send({ msg: 'Todo correcto', ok: true })
+        res.status(200).send({ msg: user, ok: true })
       }, (err) => {
         res.status(500).send({ msg: err, ok: false })
       })
@@ -43,7 +42,7 @@ function login(req, res) {
   })
 }
 
-function getById(req, res) {
+const getById = (req, res) => {
   User.findOne({ _id: req.params.id }, (err, user) => {
     if (err) return res.status(500).send({ msg: err, ok: false })
     if (!user) return res.status(500).send({ msg: 'Usuario no encontrado', ok: false })
@@ -51,33 +50,46 @@ function getById(req, res) {
   })
 }
 
-function updatePassword(req, res) {
+const updatePassword = (req, res) => {
   User.findOne({ username: req.body.username }, (err, user) => {
     if (err) return res.status(500).send({ msg: err, ok: false })
     if (!user) return res.status(500).send({ msg: 'Usuario no encontrado', ok: false })
     user.password = req.body.password
     user.save().then((us) => {
-      res.status(200).send({ message: us, ok: true })
+      res.status(200).send({ msg: us, ok: true })
     }, (err) => {
-      res.status(500).send({ message: err, ok: false })
+      res.status(500).send({ msg: err, ok: false })
     })
   })
 }
 
-function updateFavorites(req, res) {
+const updateFavorites = (req, res) => {
   User.findOne({ username: req.body.username }, (err, user) => {
     if (err) return res.status(500).send({ msg: err, ok: false })
     if (!user) return res.status(500).send({ msg: 'Usuario no encontrado', ok: false })
     user.favorites = req.body.favorites
     user.save().then((us) => {
-      res.status(200).send({ message: us, ok: true })
+      res.status(200).send({ msg: us, ok: true })
     }, (err) => {
-      res.status(500).send({ message: err, ok: false })
+      res.status(500).send({ msg: err, ok: false })
     })
   })
 }
 
-function getAll(req, res) {
+const updateProfilePic = (req, res) => {
+  User.findOne({ _id: req.params.id }, (err, user) => {
+    if (err) return res.status(500).send({ msg: err, ok: false })
+    if (!user) return res.status(500).send({ msg: 'Usuario no encontrado', ok: false })
+    user.profilePic = req.picture
+    user.save().then((userInfo) => {
+      res.status(200).send({ msg: 'Saved', ok: true })
+    }, (err) => {
+      res.status(500).send({ msg: err, ok: false })
+    })
+  })
+}
+
+const getAll = (req, res) => {
   User.find({}, (err, users) => {
     console.log(users)
     if (err) {
@@ -94,5 +106,6 @@ module.exports = {
   login,
   updatePassword,
   updateFavorites,
+  updateProfilePic,
   getAll
 }

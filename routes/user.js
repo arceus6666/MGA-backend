@@ -8,5 +8,6 @@ api.get('/find/:id', userCtrl.getById)
 api.get('/login', userCtrl.login)
 api.put('/password', userCtrl.updatePassword)
 api.put('/favorites', userCtrl.updateFavorites)
+api.put('/picture/:id', userCtrl.updateProfilePic)
 
 module.exports = api
