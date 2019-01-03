@@ -13,6 +13,8 @@
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "formidable": "^1.2.1",
+    "jwt-simple": "^0.5.5",
+    "moment": "^2.23.0",
     "mongoose": "^5.4.1"
   }
 }

@@ -1,4 +1,6 @@
 const User = require('../models/user')
+const Auth = require('../middlewares/auth')
+const Token = require('../services/token')
 
 const signUp = (req, res) => {
   const user = new User({
@@ -17,7 +19,7 @@ const signUp = (req, res) => {
   }
 
   user.save().then((us) => {
-    res.statsu(200).send({ msg: us, ok: true })
+    res.status(200).send({ msg: us, ok: true })
   }, (err) => {
     res.status(500).send({ msg: err, ok: false })
   })
@@ -28,16 +30,16 @@ const login = (req, res) => {
   let param = req.query.param.split('-')
   User.findOne({ username: param[0] }, (err, user) => {
     if (err) return res.status(500).send({ msg: err, ok: false })
-    if (!user) return res.status(500).send({ msg: 'Usuario no encontrado', ok: false })
+    if (!user) return res.status(404).send({ msg: 'User not found', ok: false })
     if (user.password === param[1]) {
       user.lastLogin = Date.now()
       user.save().then((userInfo) => {
-        res.status(200).send({ msg: user, ok: true })
+        res.status(200).send({ msg: user, token: Token.createToken(user), ok: true })
       }, (err) => {
         res.status(500).send({ msg: err, ok: false })
       })
     } else {
-      res.status(403).send({ msg: 'Contraseña incorrecta', ok: false })
+      res.status(403).send({ msg: 'Wrong password', ok: false })
     }
   })
 }
