@@ -65,14 +65,15 @@ const getAll = (req, res) => {
 }
 
 const getByGenres = (req, res) => {
+  let p = req.query.param
   Game.find({}, (err, games) => {
     if (err) {
       res.status(500).send({ msg: err, ok: false })
     } else {
       let gs = []
       for (let game in games) {
-        for (let genre in game.genres) {
-          if (req.body.genre === genre) {
+        for (let genre in games[game].genres) {
+          if (p === games[game].genres[genre]) {
             gs.push(game)
             break
           }
