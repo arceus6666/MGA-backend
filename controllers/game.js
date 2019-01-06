@@ -84,20 +84,26 @@ const getByGenres = (req, res) => {
 }
 
 const getByPlatforms = (req, res) => {
+  let p = new RegExp(req.query.param)
   Game.find({}, (err, games) => {
     if (err) {
       res.status(500).send({ msg: err, ok: false })
     } else {
       let ps = []
       for (let game in games) {
-        for (let platform in game.platforms) {
-          if (req.body.platform === platform) {
-            ps.push(game)
+        let pl = games[game].platforms
+        for (let platform in pl) {
+          if (p.test(pl[platform])) {
+            ps.push(games[game])
             break
           }
         }
       }
-      res.status(200).send({ msg: ps, ok: true })
+      if (ps.length === 0) {
+        res.status(404).send({ msg: 'No games', ok: false })
+      } else {
+        res.status(200).send({ msg: ps, ok: true })
+      }
     }
   })
 }
