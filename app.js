@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/auth', auth, (req, res) => {
-  res.status(200).send(req.user)
+  res.status(200).send(true)
 })
 
 module.exports = app

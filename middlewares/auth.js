@@ -1,7 +1,7 @@
 const tokenService = require('../services/token')
 
-function isAuth(req, res, next) {
-  console.log(req.headers)
+const isAuth = (req, res, next) => {
+  // console.log(req.headers)
   if (!req.headers.authorization) {
     return res.status(403).send({ msg: 'No authorization', ok: false })
   }
@@ -11,10 +11,11 @@ function isAuth(req, res, next) {
   tokenService.decodeToken(token)
     .then(response => {
       req.user = response
+      res.status(200).send({ msg: response, ok: true })
       next()
     })
     .catch(response => {
-      res.status(response.status).send({ msg: 'Token invalido.', ok: false })
+      res.status(403).send({ msg: 'Token invalido.', ok: false })
     })
 }
 
