@@ -18,8 +18,6 @@ app.get('/', (req, res) => {
   res.status(200).send('Todo correcto')
 })
 
-app.get('/auth', auth, (req, res) => {
-  res.status(200).send(true)
-})
+app.get('/auth', auth)
 
 module.exports = app
